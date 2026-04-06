@@ -1,14 +1,254 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Home Loan</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Offset Match Timeline</title>
+  <style>
+    :root{
+      --bg:#000000; --card:#111111; --card2:#171717; --text:#f9fafb;
+      --muted:#9ca3af; --line:#2a2a2a; --accent2:#34d399;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);padding:14px;-webkit-font-smoothing:antialiased}
+    .app{max-width:1180px;margin:0 auto;padding:8px 0 24px}
+    .hero,.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:16px;box-shadow:0 8px 20px rgba(0,0,0,.2)}
+    .hero{background:linear-gradient(135deg,#000 0%,#1a1a1a 100%);margin-bottom:14px}
+    .hero h1{margin:0 0 8px;font-size:30px}.hero p{margin:0;color:#d1d5db;font-size:15px;line-height:1.45}
+    .grid{display:grid;grid-template-columns:1fr;gap:14px}.inputs{display:grid;grid-template-columns:1fr;gap:12px}
+    @media (min-width:620px){.inputs{grid-template-columns:1fr 1fr}} @media (min-width:960px){.grid{grid-template-columns:.95fr 1.05fr}}
+    .section-title{margin:0 0 12px;font-size:20px;font-weight:800}
+    .field label{display:block;margin:0 0 6px 2px;font-size:13px;color:var(--muted);font-weight:700}
+    .input-wrap{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:16px;background:var(--card2);padding:0 12px}
+    input,select{width:100%;border:none;outline:none;background:transparent;padding:14px 0;font-size:16px;color:var(--text);appearance:none;-webkit-appearance:none}
+    input::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.85}
+    .suffix{font-size:13px;color:var(--muted);font-weight:700;white-space:nowrap}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    button{border:none;border-radius:16px;padding:14px 16px;font-size:16px;font-weight:800;cursor:pointer;min-height:48px}
+    .primary{background:#fff;color:#000;flex:1 1 180px}.secondary{background:#1a1a1a;color:#fff;border:1px solid var(--line);flex:1 1 160px}
+    .result{background:linear-gradient(180deg,#0b0b0b 0%,#111 100%)}
+    .eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);font-weight:800;margin:0 0 8px}
+    .big{font-size:clamp(30px,6vw,48px);line-height:1;font-weight:900;margin:0 0 10px;word-break:break-word}
+    .muted{color:var(--muted);font-size:14px;line-height:1.5}
+    .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+    .stat{background:var(--card2);border:1px solid var(--line);border-radius:20px;padding:14px}
+    .label{font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:700}.value{font-size:20px;font-weight:900;line-height:1.15}
+    .summary{margin-top:14px;padding:14px;background:var(--card2);border:1px solid var(--line);border-radius:18px;font-size:14px;line-height:1.6}
+    .table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:18px;background:var(--card);margin-top:14px;max-height:70vh}
+    table{width:100%;border-collapse:collapse;min-width:920px;background:var(--card)}
+    th,td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:14px;white-space:nowrap;vertical-align:top}
+    th{background:#151515;position:sticky;top:0;z-index:1;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+    .right{text-align:right}.small-note{margin-top:12px;font-size:12px;color:var(--muted);line-height:1.5}
+  </style>
+
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 </head>
-<body style="background:#050812;color:white;font-family:sans-serif;text-align:center;margin-top:50px;">
-<h1>Home Loan App</h1>
-<p>Your calculator is ready</p>
+<body>
+<div class="app">
+  <div class="hero">
+    <h1>Offset Match Timeline</h1>
+    <p>This stops at the exact event where your offset balance first becomes equal to or higher than your loan balance.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2 class="section-title">Inputs</h2>
+      <div class="inputs">
+        <div class="field"><label for="startDate">Start date</label><div class="input-wrap"><input id="startDate" type="date" value="2026-04-05"></div></div>
+        <div class="field"><label for="loanBalance">Loan balance now</label><div class="input-wrap"><input id="loanBalance" type="number" value="220000"><span class="suffix">AUD</span></div></div>
+        <div class="field"><label for="interestRate">Interest rate</label><div class="input-wrap"><input id="interestRate" type="number" step="0.01" value="6.24"><span class="suffix">%</span></div></div>
+        <div class="field"><label for="offsetStart">Offset balance now</label><div class="input-wrap"><input id="offsetStart" type="number" value="1046"><span class="suffix">AUD</span></div></div>
+        <div class="field"><label for="repaymentAmount">Bank repayment amount</label><div class="input-wrap"><input id="repaymentAmount" type="number" step="0.01" value="608.12"><span class="suffix">AUD</span></div></div>
+        <div class="field"><label for="repaymentDate">First repayment date</label><div class="input-wrap"><input id="repaymentDate" type="date" value="2026-04-07"></div></div>
+        <div class="field"><label for="offsetContribution">Your fortnightly deposit into offset</label><div class="input-wrap"><input id="offsetContribution" type="number" value="700"><span class="suffix">AUD</span></div></div>
+        <div class="field"><label for="offsetContributionDate">First fortnightly deposit date</label><div class="input-wrap"><input id="offsetContributionDate" type="date" value="2026-04-09"></div></div>
+        <div class="field"><label for="monthlyRent">Monthly rent into offset</label><div class="input-wrap"><input id="monthlyRent" type="number" value="771.33"><span class="suffix">AUD</span></div></div>
+        <div class="field"><label for="rentDate">First rent date</label><div class="input-wrap"><input id="rentDate" type="date" value="2026-05-01"></div></div>
+        <div class="field"><label for="extraAmount">Extra amount into offset</label><div class="input-wrap"><input id="extraAmount" type="number" value="0"><span class="suffix">AUD</span></div></div>
+        <div class="field"><label for="extraFrequency">Extra offset frequency</label><div class="input-wrap"><select id="extraFrequency"><option value="none" selected>None</option><option value="weekly">Weekly</option><option value="fortnightly">Fortnightly</option><option value="monthly">Monthly</option></select></div></div>
+        <div class="field"><label for="extraDate">First extra offset date</label><div class="input-wrap"><input id="extraDate" type="date" value="2026-04-09"></div></div>
+      </div>
+      <div class="actions">
+        <button class="primary" onclick="calculate()">Calculate match point</button>
+        <button class="secondary" onclick="resetDefaults()">Reset</button>
+      </div>
+      <div class="small-note">All your money goes into offset. Only the bank repayment comes out of offset every fortnight. The table ends at the first event where offset ≥ loan.</div>
+    </div>
+
+    <div class="card result">
+      <div class="eyebrow">Match point</div>
+      <div class="big" id="matchDate">—</div>
+      <div class="muted" id="headlineText">Tap calculate to find the exact offset match point.</div>
+      <div class="stat-grid">
+        <div class="stat"><div class="label">Days until match</div><div class="value" id="daysToMatch">—</div></div>
+        <div class="stat"><div class="label">Years until match</div><div class="value" id="yearsToMatch">—</div></div>
+        <div class="stat"><div class="label">Loan at match</div><div class="value" id="loanAtMatch">—</div></div>
+        <div class="stat"><div class="label">Offset at match</div><div class="value" id="offsetAtMatch">—</div></div>
+      </div>
+      <div class="summary" id="summaryBox">Your summary will appear here.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px;">
+    <h2 class="section-title">Timeline to match point</h2>
+    <div class="muted">Only events up to and including the first match event are shown.</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Event</th>
+            <th class="right">Interest since last event</th>
+            <th class="right">Loan after event</th>
+            <th class="right">Offset after event</th>
+            <th class="right">Effective loan</th>
+          </tr>
+        </thead>
+        <tbody id="timelineBody">
+          <tr><td colspan="6" style="color:#9ca3af;background:#111111;">Tap calculate to generate the timeline.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+function parseDateLocal(v){const [y,m,d]=v.split('-').map(Number);return new Date(y,m-1,d);}
+function formatDate(d){return d.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'});}
+function formatLongDate(d){return d.toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short',year:'numeric'});}
+function money(x){return new Intl.NumberFormat('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0}).format(Number.isFinite(x)?x:0);}
+function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x;}
+function addMonthsPreserveDay(d,months){const x=new Date(d);const od=x.getDate();x.setMonth(x.getMonth()+months); if(x.getDate()<od)x.setDate(0); return x;}
+function dateDiffDays(a,b){return Math.round((b-a)/(1000*60*60*24));}
+function nextExtraDate(d,f){if(f==='weekly')return addDays(d,7); if(f==='fortnightly')return addDays(d,14); if(f==='monthly')return addMonthsPreserveDay(d,1); return new Date(8640000000000000);}
+
+function calculate(){
+  const startDate=parseDateLocal(document.getElementById('startDate').value);
+  const annualRate=(parseFloat(document.getElementById('interestRate').value)||0)/100;
+  let loan=parseFloat(document.getElementById('loanBalance').value)||0;
+  let offset=parseFloat(document.getElementById('offsetStart').value)||0;
+  const repaymentAmount=parseFloat(document.getElementById('repaymentAmount').value)||0;
+  const offsetContribution=parseFloat(document.getElementById('offsetContribution').value)||0;
+  const monthlyRent=parseFloat(document.getElementById('monthlyRent').value)||0;
+  const extraAmount=parseFloat(document.getElementById('extraAmount').value)||0;
+  const extraFrequency=document.getElementById('extraFrequency').value;
+
+  let nextRepayment=parseDateLocal(document.getElementById('repaymentDate').value);
+  let nextOffset=parseDateLocal(document.getElementById('offsetContributionDate').value);
+  let nextRent=parseDateLocal(document.getElementById('rentDate').value);
+  let nextExtra=parseDateLocal(document.getElementById('extraDate').value);
+
+  if (nextRepayment < startDate || nextOffset < startDate || nextRent < startDate || (extraFrequency !== 'none' && nextExtra < startDate)) {
+    document.getElementById('headlineText').textContent='One or more dates are earlier than the start date.';
+    return;
+  }
+
+  const dailyRate=annualRate/365;
+  let currentDate=new Date(startDate);
+  let accruedInterest=0;
+  let rows='';
+  let matchDate=null, matchLoan=null, matchOffset=null;
+  let safety=0;
+
+  while(safety < 50000){
+    safety++;
+
+    let eventType='repayment';
+    let eventDate=nextRepayment;
+
+    if(nextOffset < eventDate){eventDate=nextOffset; eventType='offset';}
+    if(nextRent < eventDate){eventDate=nextRent; eventType='rent';}
+    if(extraFrequency !== 'none' && extraAmount > 0 && nextExtra < eventDate){eventDate=nextExtra; eventType='extra';}
+
+    const daysBetween=dateDiffDays(currentDate,eventDate);
+    const effectiveBefore=Math.max(loan-offset,0);
+    const interestForPeriod=effectiveBefore*dailyRate*daysBetween;
+    accruedInterest += interestForPeriod;
+    currentDate=new Date(eventDate);
+
+    if(eventType==='repayment'){
+      offset -= repaymentAmount;
+      const interestPart=Math.min(repaymentAmount,accruedInterest);
+      accruedInterest -= interestPart;
+      const principalPart=Math.max(repaymentAmount-interestPart,0);
+      loan=Math.max(loan-principalPart,0);
+      nextRepayment=addDays(nextRepayment,14);
+    } else if(eventType==='offset'){
+      offset += offsetContribution;
+      nextOffset=addDays(nextOffset,14);
+    } else if(eventType==='rent'){
+      offset += monthlyRent;
+      nextRent=addMonthsPreserveDay(nextRent,1);
+    } else if(eventType==='extra'){
+      offset += extraAmount;
+      nextExtra=nextExtraDate(nextExtra,extraFrequency);
+    }
+
+    const label = eventType==='repayment' ? 'Loan repayment from offset' :
+                  eventType==='offset' ? 'Your fortnightly offset deposit' :
+                  eventType==='rent' ? 'Rent into offset' : 'Extra amount into offset';
+
+    rows += `
+      <tr>
+        <td>${formatDate(currentDate)}</td>
+        <td>${label}</td>
+        <td class="right">${money(interestForPeriod)}</td>
+        <td class="right">${money(loan)}</td>
+        <td class="right">${money(offset)}</td>
+        <td class="right"><strong>${money(Math.max(loan-offset,0))}</strong></td>
+      </tr>
+    `;
+
+    if(offset >= loan){
+      matchDate=new Date(currentDate);
+      matchLoan=loan;
+      matchOffset=offset;
+      break;
+    }
+  }
+
+  document.getElementById('matchDate').textContent = matchDate ? formatLongDate(matchDate) : 'Not reached';
+  document.getElementById('headlineText').textContent = matchDate ? 'This is the first event where your offset equals or exceeds your loan.' : 'No match point reached with these settings.';
+  document.getElementById('daysToMatch').textContent = matchDate ? dateDiffDays(startDate,matchDate).toLocaleString() : 'Not reached';
+  document.getElementById('yearsToMatch').textContent = matchDate ? ((dateDiffDays(startDate,matchDate)/365.25).toFixed(1)+' yrs') : 'Not reached';
+  document.getElementById('loanAtMatch').textContent = matchDate ? money(matchLoan) : 'Not reached';
+  document.getElementById('offsetAtMatch').textContent = matchDate ? money(matchOffset) : 'Not reached';
+
+  const extraText = extraFrequency !== 'none' && extraAmount > 0
+    ? `Extra into offset: <strong>${money(extraAmount)}</strong> ${extraFrequency}, starting <strong>${formatDate(parseDateLocal(document.getElementById('extraDate').value))}</strong>.`
+    : `Extra into offset: <strong>None</strong>.`;
+
+  document.getElementById('summaryBox').innerHTML = `
+    Start date: <strong>${formatDate(startDate)}</strong>.<br>
+    Bank repayment from offset: <strong>${money(repaymentAmount)}</strong> every fortnight starting <strong>${formatDate(parseDateLocal(document.getElementById('repaymentDate').value))}</strong>.<br>
+    Your fortnightly offset deposit: <strong>${money(offsetContribution)}</strong> starting <strong>${formatDate(parseDateLocal(document.getElementById('offsetContributionDate').value))}</strong>.<br>
+    Rent into offset: <strong>${money(monthlyRent)}</strong> monthly starting <strong>${formatDate(parseDateLocal(document.getElementById('rentDate').value))}</strong>.<br>
+    ${extraText}<br>
+    Match point: <strong>${matchDate ? formatDate(matchDate) : 'Not reached'}</strong>.
+  `;
+
+  document.getElementById('timelineBody').innerHTML = rows || '<tr><td colspan="6" style="color:#9ca3af;background:#111111;">No events generated.</td></tr>';
+}
+
+function resetDefaults(){
+  document.getElementById('startDate').value='2026-04-05';
+  document.getElementById('loanBalance').value='220000';
+  document.getElementById('interestRate').value='6.24';
+  document.getElementById('offsetStart').value='1046';
+  document.getElementById('repaymentAmount').value='608.12';
+  document.getElementById('repaymentDate').value='2026-04-07';
+  document.getElementById('offsetContribution').value='700';
+  document.getElementById('offsetContributionDate').value='2026-04-09';
+  document.getElementById('monthlyRent').value='771.33';
+  document.getElementById('rentDate').value='2026-05-01';
+  document.getElementById('extraAmount').value='0';
+  document.getElementById('extraFrequency').value='none';
+  document.getElementById('extraDate').value='2026-04-09';
+  calculate();
+}
+calculate();
+</script>
 </body>
 </html>
